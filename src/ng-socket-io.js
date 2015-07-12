@@ -1,8 +1,8 @@
 (function() {
 'use strict';
 
-angular.module('socket-io', []).factory('socket', function($rootScope, io) {
-    var socket = io.connect(),
+angular.module('socket-io', []).factory('socket', ["$rootScope","io", function($rootScope, io) {
+    var socket,
         events = {},
         that = {};
 
@@ -65,6 +65,9 @@ angular.module('socket-io', []).factory('socket', function($rootScope, io) {
     };
 
     that = {
+        connect: function (server) {
+            socket = io.connect(server)
+        },
         on: function(name, callback) {
             socket.on(name, addCallback(name, callback));
             return listener(name, callback);
@@ -91,7 +94,7 @@ angular.module('socket-io', []).factory('socket', function($rootScope, io) {
     };
 
     return that;
-})
+}])
 .factory('io', function() {
     return io;
 });
